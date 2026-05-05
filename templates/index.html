@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume ATS Bot | Premium Evaluation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+
+    <div class="container">
+        <header>
+            <h1>ATS<span class="highlight">Scorer</span></h1>
+            <p>Elevate your resume with AI-driven ATS analysis</p>
+        </header>
+
+        <main class="dashboard">
+            <div class="panel input-panel glass">
+                <form id="evaluationForm" enctype="multipart/form-data">
+                    <div class="input-group">
+                        <label for="jobDescription"><i class="fas fa-briefcase"></i> Job Description</label>
+                        <textarea id="jobDescription" name="job_description" placeholder="Paste the full job description here..." required></textarea>
+                    </div>
+
+                    <div class="input-group">
+                        <label><i class="fas fa-file-alt"></i> Your Resume</label>
+                        <div class="toggle-container">
+                            <input type="radio" id="uploadMethod" name="input_method" value="upload" checked>
+                            <label for="uploadMethod" class="toggle-btn">Upload File</label>
+                            
+                            <input type="radio" id="pasteMethod" name="input_method" value="paste">
+                            <label for="pasteMethod" class="toggle-btn">Paste Text</label>
+                        </div>
+                        
+                        <div id="uploadSection" class="resume-input-section active">
+                            <div class="file-upload-wrapper">
+                                <input type="file" id="resumeFile" name="resume_file" accept=".pdf,.docx,.txt" class="file-input">
+                                <div class="file-upload-design">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Drag & Drop or <span class="browse">Browse</span></p>
+                                    <span class="file-info">PDF, DOCX, TXT</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="pasteSection" class="resume-input-section">
+                            <textarea id="resumeText" name="resume_text" placeholder="Paste your resume text here..."></textarea>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <span class="btn-text">Analyze Resume</span>
+                        <div class="spinner"></div>
+                    </button>
+                </form>
+            </div>
+
+            <div class="panel result-panel glass" id="resultPanel">
+                <div class="empty-state">
+                    <i class="fas fa-robot"></i>
+                    <p>Awaiting input for analysis...</p>
+                </div>
+
+                <div class="results-content hidden">
+                    <div class="score-section">
+                        <div class="score-circle">
+                            <svg viewBox="0 0 36 36" class="circular-chart">
+                                <path class="circle-bg"
+                                    d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                />
+                                <path class="circle"
+                                    stroke-dasharray="0, 100"
+                                    d="M18 2.0845
+                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                />
+                            </svg>
+                            <div class="percentage" id="scorePercentage">0%</div>
+                        </div>
+                        <div class="score-text">
+                            <h2 id="scoreStatus">Match Score</h2>
+                            <p id="profileSummary"></p>
+                        </div>
+                    </div>
+
+                    <div class="tabs">
+                        <button type="button" class="tab-btn active" data-target="keywords">Keywords</button>
+                        <button type="button" class="tab-btn" data-target="recommendations">Recommendations</button>
+                    </div>
+
+                    <div class="tab-content active" id="keywords">
+                        <div class="keywords-grid">
+                            <div class="keyword-box matched">
+                                <h3><i class="fas fa-check-circle"></i> Matched</h3>
+                                <ul id="matchedKeywordsList"></ul>
+                            </div>
+                            <div class="keyword-box missing">
+                                <h3><i class="fas fa-times-circle"></i> Missing</h3>
+                                <ul id="missingKeywordsList"></ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-content" id="recommendations">
+                        <div class="recommendation-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <p id="recommendationText"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
