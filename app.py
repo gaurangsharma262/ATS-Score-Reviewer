@@ -1,4 +1,7 @@
 import os
+import threading
+import time
+import requests
 from flask import Flask, render_template, request, jsonify
 from werkzeug.utils import secure_filename
 from utils import extract_text_from_pdf, extract_text_from_docx
@@ -10,6 +13,22 @@ load_dotenv()
 app = Flask(__name__)
 # Keep uploads simple - just read them in memory
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024 # 16 MB limit
+
+# Heartbeat mechanism to prevent Render sleep
+def keep_alive():
+    url = os.getenv('RENDER_EXTERNAL_URL')
+    if not url:
+        return # Skip if not running on Render or URL is not set
+        
+    while True:
+        try:
+            time.sleep(10 * 60) # Ping every 10 minutes
+            requests.get(url)
+        except Exception:
+            pass
+
+# Start the background heartbeat thread
+threading.Thread(target=keep_alive, daemon=True).start()
 
 @app.route('/')
 def index():
