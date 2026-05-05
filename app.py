@@ -2,7 +2,7 @@ import os
 import threading
 import time
 import requests
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from utils import extract_text_from_pdf, extract_text_from_docx
 from llm_scorer import get_ats_score
@@ -33,6 +33,10 @@ threading.Thread(target=keep_alive, daemon=True).start()
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/ads.txt')
+def ads_txt():
+    return send_from_directory(app.root_path, 'ads.txt')
 
 @app.route('/api/evaluate', methods=['POST'])
 def evaluate():
